@@ -1,0 +1,76 @@
+plugins {
+    id 'io.github.nadberezny.java-conventions'
+    id 'application'
+    id 'com.github.johnrengelman.shadow'
+}
+
+ext {
+    flinkVersion = "1.19.1"
+}
+
+extensions.create('flinkConventions', FlinkConventionsConfig)
+
+configurations {
+    flinkShadowJar // dependencies which go into the shadowJar
+    flinkLib // dependencies which go into Flink lib directory
+
+    // always exclude these (also from transitive dependencies) since they are provided by Flink
+    flinkShadowJar.exclude group: 'org.apache.flink', module: 'force-shading'
+    flinkShadowJar.exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    flinkShadowJar.exclude group: 'org.slf4j'
+    flinkShadowJar.exclude group: 'org.apache.logging.log4j'
+}
+
+afterEvaluate {
+    project.mainClassName = flinkConventions.mainClass
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.WARN
+        manifest {
+            attributes 'Built-By': System.getProperty('user.name'),
+                    'Build-Jdk': System.getProperty('java.version'),
+                    'Main-Class': flinkConventions.mainClass
+        }
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+
+    shadowJar {
+        configurations = [project.configurations.flinkShadowJar]
+    }
+
+    sourceSets {
+        main.compileClasspath += configurations.flinkShadowJar
+        main.runtimeClasspath += configurations.flinkShadowJar
+        main.runtimeClasspath += configurations.flinkLib
+
+        test.compileClasspath += configurations.flinkShadowJar
+        test.runtimeClasspath += configurations.flinkShadowJar
+        test.runtimeClasspath += configurations.flinkLib
+
+        javadoc.classpath += configurations.flinkShadowJar
+    }
+    run.classpath = sourceSets.main.runtimeClasspath
+
+    applicationDefaultJvmArgs = ["-Dlog4j.configurationFile=log4j2.properties"]
+
+    dependencies {
+        implementation platform("org.apache.logging.log4j:log4j-bom:2.23.1")
+
+        implementation "org.apache.flink:flink-streaming-java:${flinkVersion}"
+        implementation "org.apache.flink:flink-clients:${flinkVersion}"
+
+        runtimeOnly "org.apache.logging.log4j:log4j-slf4j2-impl"
+        runtimeOnly "org.apache.logging.log4j:log4j-api"
+        runtimeOnly "org.apache.logging.log4j:log4j-core"
+
+        testImplementation "org.apache.flink:flink-test-utils:${flinkVersion}"
+        testImplementation "org.apache.flink:flink-test-utils-junit:${flinkVersion}"
+        testImplementation "org.apache.flink:flink-streaming-java:tests:${flinkVersion}"
+    }
+}
+
+class FlinkConventionsConfig {
+    String mainClass
+}

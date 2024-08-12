@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok"
+    id "io.github.nadberezny.repositories"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://packages.confluent.io/maven/"
+    }
+}
+
+afterEvaluate {
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+
+    test {
+        useJUnitPlatform()
+
+        testLogging {
+            events "passed"
+        }
+
+        reports {
+            junitXml.required = true
+            junitXml.outputLocation = layout.buildDirectory.dir("reports/tests-xml/${name}")
+            html.required = true
+        }
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testImplementation 'org.junit.jupiter:junit-jupiter-params'
+        testImplementation 'org.assertj:assertj-core'
+        testImplementation 'org.awaitility:awaitility'
+        testImplementation 'org.mockito:mockito-core'
+        testImplementation 'org.mockito:mockito-junit-jupiter'
+
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+    }
+}

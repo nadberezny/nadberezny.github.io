@@ -1,0 +1,39 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url = "https://packages.confluent.io/maven/"
+        }
+        maven {
+            url = "https://jitpack.io"
+        }
+        maven {
+            url = "https://nexus.dema.ai/repository/maven-releases/"
+        }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
+}
+
+rootProject.name = 'nadberezny-blog'
+
+include 'advanced-session-windows'
+project(':advanced-session-windows').projectDir = file('code/advanced-session-windows')
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url "https://repository.apache.org/content/repositories/snapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+        maven {
+            url "https://packages.confluent.io/maven/"
+        }
+    }
+}

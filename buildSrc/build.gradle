@@ -1,0 +1,23 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+    maven {
+        url "https://repository.apache.org/content/repositories/snapshots"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    maven {
+        url "https://packages.confluent.io/maven/"
+    }
+}
+
+dependencies {
+    // Plugins
+    implementation('com.github.johnrengelman:shadow:8.1.1')
+    implementation('io.freefair.gradle:lombok-plugin:8.6')
+}

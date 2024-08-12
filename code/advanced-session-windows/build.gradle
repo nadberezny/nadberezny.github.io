@@ -1,0 +1,8 @@
+plugins {
+     id 'io.github.nadberezny.flink-conventions'
+    id 'java'
+}
+
+ flinkConventions {
+     mainClass = 'io.github.nadberezny.flink.AdvancedSessionWindows'
+ }
