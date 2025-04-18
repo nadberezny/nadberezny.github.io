@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Democratize Streaming</title>
+    <link>https://desm.cloud/</link>
+    <description>Recent content on Democratize Streaming</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 Jan 2024 07:07:07 +0100</lastBuildDate>
+    <atom:link href="https://desm.cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Making the Right Choice: Flink or Kafka Streams?</title>
+      <link>https://desm.cloud/posts/kafka-streams-vs-flink/</link>
+      <pubDate>Sun, 14 Jan 2024 07:07:07 +0100</pubDate>
+      <guid>https://desm.cloud/posts/kafka-streams-vs-flink/</guid>
+      <description>&lt;h1 id=&#34;making-the-right-choice-flink-or-kafka-streams&#34;&gt;Making the Right Choice: Flink or Kafka Streams?&lt;/h1&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://desm.cloud/images/street-figher.jpg&#34; alt=&#34;Fight image&#34;&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams?&#xA;In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another.&#xA;To do this properly, we’ll examine both engines across several important dimensions.&#xA;Disclaimer: This article assumes some initial familiarity with at least one of the two technologies—either Flink or Kafka Streams. The goal here is not to cover the basics, but rather to highlight the deeper architectural differences and trade-offs that aren’t always obvious at first glance.&#xA;At its core, the responsibility of a streaming engine is to provide robust tools for handling &lt;strong&gt;stateful&lt;/strong&gt; and &lt;strong&gt;timely&lt;/strong&gt; operations over continuous streams of events. We’ll begin by looking at what mechanics of time each engine provides and then explore how they manage state. We’ll continue with deployment and orchestration capabilities and finally, look at their flexibility, and the ecosystems around them.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

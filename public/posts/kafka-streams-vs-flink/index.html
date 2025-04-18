@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Making the Right Choice: Flink or Kafka Streams? | Democratize Streaming</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="Making the Right Choice: Flink or Kafka Streams?
+
+Introduction
+This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams?
+In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another.
+To do this properly, we’ll examine both engines across several important dimensions.
+Disclaimer: This article assumes some initial familiarity with at least one of the two technologies—either Flink or Kafka Streams. The goal here is not to cover the basics, but rather to highlight the deeper architectural differences and trade-offs that aren’t always obvious at first glance.
+At its core, the responsibility of a streaming engine is to provide robust tools for handling stateful and timely operations over continuous streams of events. We’ll begin by looking at what mechanics of time each engine provides and then explore how they manage state. We’ll continue with deployment and orchestration capabilities and finally, look at their flexibility, and the ecosystems around them.">
+    <meta name="generator" content="Hugo 0.146.5">
+    
+    
+    
+      <meta name="robots" content="index, follow">
+    
+    <meta name="author" content="Juliusz Nadbereżny">
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.d05fb5f317fcf33b3a52936399bdf6f47dc776516e1692e412ec7d76f4a5faa2.css" >
+
+
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="https://desm.cloud/posts/kafka-streams-vs-flink/">
+    
+
+    <meta property="og:url" content="https://desm.cloud/posts/kafka-streams-vs-flink/">
+  <meta property="og:site_name" content="Democratize Streaming">
+  <meta property="og:title" content="Making the Right Choice: Flink or Kafka Streams?">
+  <meta property="og:description" content="Making the Right Choice: Flink or Kafka Streams? Introduction This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams? In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another. To do this properly, we’ll examine both engines across several important dimensions. Disclaimer: This article assumes some initial familiarity with at least one of the two technologies—either Flink or Kafka Streams. The goal here is not to cover the basics, but rather to highlight the deeper architectural differences and trade-offs that aren’t always obvious at first glance. At its core, the responsibility of a streaming engine is to provide robust tools for handling stateful and timely operations over continuous streams of events. We’ll begin by looking at what mechanics of time each engine provides and then explore how they manage state. We’ll continue with deployment and orchestration capabilities and finally, look at their flexibility, and the ecosystems around them.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-01-14T07:07:07+01:00">
+    <meta property="article:modified_time" content="2024-01-14T07:07:07+01:00">
+
+  <meta itemprop="name" content="Making the Right Choice: Flink or Kafka Streams?">
+  <meta itemprop="description" content="Making the Right Choice: Flink or Kafka Streams? Introduction This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams? In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another. To do this properly, we’ll examine both engines across several important dimensions. Disclaimer: This article assumes some initial familiarity with at least one of the two technologies—either Flink or Kafka Streams. The goal here is not to cover the basics, but rather to highlight the deeper architectural differences and trade-offs that aren’t always obvious at first glance. At its core, the responsibility of a streaming engine is to provide robust tools for handling stateful and timely operations over continuous streams of events. We’ll begin by looking at what mechanics of time each engine provides and then explore how they manage state. We’ll continue with deployment and orchestration capabilities and finally, look at their flexibility, and the ecosystems around them.">
+  <meta itemprop="datePublished" content="2024-01-14T07:07:07+01:00">
+  <meta itemprop="dateModified" content="2024-01-14T07:07:07+01:00">
+  <meta itemprop="wordCount" content="1675">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Making the Right Choice: Flink or Kafka Streams?">
+  <meta name="twitter:description" content="Making the Right Choice: Flink or Kafka Streams? Introduction This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams? In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another. To do this properly, we’ll examine both engines across several important dimensions. Disclaimer: This article assumes some initial familiarity with at least one of the two technologies—either Flink or Kafka Streams. The goal here is not to cover the basics, but rather to highlight the deeper architectural differences and trade-offs that aren’t always obvious at first glance. At its core, the responsibility of a streaming engine is to provide robust tools for handling stateful and timely operations over continuous streams of events. We’ll begin by looking at what mechanics of time each engine provides and then explore how they manage state. We’ll continue with deployment and orchestration capabilities and finally, look at their flexibility, and the ecosystems around them.">
+
+      
+    
+	
+  </head><body class="ma0 avenir bg-near-white production">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        Democratize Streaming
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Posts
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">Making the Right Choice: Flink or Kafka Streams?</h1>
+      
+      <p class="tracked"><strong>Juliusz Nadbereżny</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-01-14T07:07:07+01:00">January 14, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="making-the-right-choice-flink-or-kafka-streams">Making the Right Choice: Flink or Kafka Streams?</h1>
+<p><img src="/images/street-figher.jpg" alt="Fight image"></p>
+<h2 id="introduction">Introduction</h2>
+<p>This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams?
+In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another.
+To do this properly, we’ll examine both engines across several important dimensions.
+Disclaimer: This article assumes some initial familiarity with at least one of the two technologies—either Flink or Kafka Streams. The goal here is not to cover the basics, but rather to highlight the deeper architectural differences and trade-offs that aren’t always obvious at first glance.
+At its core, the responsibility of a streaming engine is to provide robust tools for handling <strong>stateful</strong> and <strong>timely</strong> operations over continuous streams of events. We’ll begin by looking at what mechanics of time each engine provides and then explore how they manage state. We’ll continue with deployment and orchestration capabilities and finally, look at their flexibility, and the ecosystems around them.</p>
+<p>Then we will dive into what deployment mode they provide and how you can orchestrate them. Also, how versatile and flexible they are and what is the ecosystem around them.</p>
+<h2 id="similarities">Similarities</h2>
+<p>Let’s start by outlining the similarities between Flink and Kafka Streams—because there are quite a few. Both frameworks share common concepts and a similar way of structuring your streaming topology. In each, you define a Directed Acyclic Graph with multiple sources and multiple sinks.</p>
+<p>Their programmatic APIs also have a lot in common. You work with high-level operations like keyBy, map, flatMap, aggregations, windowing, joins, unions, and more. Both support the ability to combine and transform streams in expressive and composable ways.</p>
+<p>For more advanced use cases, they both offer low-level APIs—Flink provides the ProcessFunction, while Kafka Streams exposes a Processor API. Speaking of APIs, there are differences in how operator state is handled, but I’ll get into that a bit later.</p>
+<p>They also both provide SQL layers for higher-level stream processing, which can be useful for teams looking to abstract away some of the imperative logic.</p>
+<p>And finally, both use RocksDB as one of the state backends for scalable, local state storage.</p>
+<p>But with this article, I want to focus on the fundamental differences - the kind that shape architecture and influence long-term maintainability and flexibility. We won’t be diving into what Werner Herzog might call the “accountant’s truth.” Instead, we’ll keep our eyes on what really matters when building reliable, scalable streaming systems.</p>
+<h2 id="time">Time</h2>
+<p><img src="/images/logical-time.png" alt="Logical time image">
+The most fundamental concept in stream processing is the notion of time—specifically, logical time, often referred to as event time. This concept abstracts away from wall-clock time. Instead, the timestamps on the events themselves drive the progression of time. In other words, it’s the data that moves the clock forward.
+You might think of this as somewhat similar to Lamport’s <strong>logical clock</strong>: if no new events arrive, time stands still.
+Flink and Kafka Streams approach this concept differently.</p>
+<h3 id="kafka-streams-and-stream-time">Kafka Streams and Stream Time</h3>
+<p>Kafka Streams uses a concept called stream time, which is defined as the maximum event timestamp observed so far. It’s a simple and intuitive model: time progresses only when new events with later timestamps arrive.</p>
+<p>However, this tight coupling of time and event flow introduces limitations. If an operator filters out most events, stream time may stall, causing issues for time-based operations like windowing. Since no new timestamps are observed, Kafka Streams can’t advance stream time. This might be really problematic in scenarios where one of your operators is aggressively filtering out events, which will hold downstream operators from releasing windows because they won’t be able to notice the progress of time.</p>
+<h3 id="flink-and-watermarks">Flink and Watermarks</h3>
+<p>Flink, on the other hand, introduces watermarks—special time markers that flow independently through the data stream. While they are still based on event timestamps, they flow through the stream independently.
+This decoupling solves the problem Kafka Streams faces. Even if no events pass through a given operator, Flink can continue advancing time via watermarks. This also allows it to handle idle sources gracefully by emitting idle markers, ensuring that downstream operators don’t get stuck waiting.</p>
+<h2 id="state">State</h2>
+<p>Working with unbounded data means you need state. In other words, you need to remember what happened before. State is a memory of past events—and that state needs to scale. Both Flink and Kafka Streams use RocksDB for managing local state when it grows beyond memory. But this state is ephemeral—it must be backed by a durable storage layer. It&rsquo;s very common to keep gigabytes of processing state memory distributed over worker nodes. This memory needs to be scalable.</p>
+<h3 id="kafka-streams-state-backing">Kafka Streams State Backing</h3>
+<p>Kafka Streams stores state changelogs in Kafka topics. This approach of “eating your own dog food” has the benefit of avoiding additional external dependencies. However, it comes with significant architectural trade-offs.
+By tightly coupling compute and storage within Kafka itself, you inherit all of Kafka’s operational complexities: broker rebalancing, partition reassignment, scaling challenges, and increased load on the Kafka cluster as your stream processing workload grows.</p>
+<h3 id="flink-state-backing">Flink State Backing</h3>
+<p>Flink backs its state to remote storage, typically Amazon S3, HDFS, or another distributed file system. This separation allows for less maintenance and less costs . Moreover, the new feature of Flink’s - Disaggregated State and ForSt state backend unlocks some storage limitations of cloud native deployments.
+Disaggregated State and the ForSt backend are designed to make large state workloads more cloud-friendly.
+This is especially important for long-running jobs with large keyed state, such as session-based analytics or enrichment use cases. Without disaggregated state, scaling these jobs becomes painful— imagine all those scenarios where you had to reinvent your streaming architecture because you were limited by local storage for TaskManagers
+Overall, maintainability improves when state management is decoupled and externalized. You gain faster recovery, and the freedom to optimize compute usage, all of which are much harder to achieve when your state is locked inside the execution layer.</p>
+<h2 id="deployment-and-operations">Deployment and Operations</h2>
+<p>If you’re not using a fully managed service and need to run your streaming engine yourself, deployment and operational concerns become critical.</p>
+<h3 id="kafka-streams-simplicity-and-trade-offs">Kafka Streams Simplicity (and Trade-Offs)</h3>
+<p>Kafka Streams is just a library, which makes it easy to integrate into your application - it’s just a Java library that you embed into your application code. You don’t deploy a Kafka Streams “cluster” - instead, your application is the processing node. But this simplicity comes at a cost - many of the responsibilities are put on your shoulders.
+This library-only model can make Kafka Streams challenging to operate at scale, especially in production environments. Take, for example, something as fundamental as exception handling. Kafka Streams provides only a basic mechanism: the StreamsUncaughtExceptionHandler, which lets you decide whether to replace the thread that encountered an exception, shut down a client, or terminate the entire application.
+But, there’s no built-in way to configure a fine-grained restart strategy with retries, backoff intervals, or fallback logic. Needless to say that you will miss a centralized fault handling. Each instance is responsible for itself. There’s no external controller that can reschedule or restart jobs. You’re essentially left to handle all of that on your own.</p>
+<h3 id="flinks-runtime">Flink’s Runtime</h3>
+<p>Flink is a fully-fledged distributed data processing framework. Flink has a dedicated runtime architecture built around JobManagers and TaskManagers. JobManager: The brain of a Flink deployment is responsible for job scheduling, checkpoint coordination, failure recovery, and overall resource orchestration. Flink ecosystem offers native orchestration tools, including excellent Kubernetes support via the Flink Kubernetes Operator.
+This enables advanced capabilities like autoscaling with fine-grained resource tuning, and good support for operations.</p>
+<h2 id="final-thoughts-and-word-about-versatility">Final thoughts and word about versatility</h2>
+<p><img src="/images/assets/split-road.png" alt="Split road image"></p>
+<p>As you might have noticed, Flink came out ahead in all the aspects we compared it to Kafka Streams. But I don’t want to give the wrong impression about Kafka Streams—I think it’s a great tool. There are areas where Kafka Streams, in my opinion, does things better. One notable example is the KTable abstraction, which feels more natural and intuitive compared to how state is managed in Flink. In Kafka Streams, KTable provides a clear, high-level representation of a changelog stream as a materialized view. In contrast, Flink’s state is tightly coupled to operators and scoped within the boundaries of a specific transformation. Also, what I really like about Kafka Streams is its simplicity in terms of architecture: it runs purely on Kafka, with no extra dependencies. That can be a key advantage for some teams.
+However, I don’t fully agree with the often repeated argument that Kafka Streams is much simpler than Flink. Frankly, I find Kafka Streams more challenging and harder to maintain at scale in production environments, precisely because of its “library-only” nature. The operational burden ends up on your shoulders.
+But overall it’s just that Flink is better for what matters in the kinds of scenarios we’ve been focusing on.
+In the end, it might just come down to versatility. Flink’s flexibility and the broader ecosystem built around it make it a formidable contender in the streaming space. This becomes especially relevant as Kafka-less architectures continue to emerge, and lakehouses like Paimon can act as transport layers in certain scenarios.</p>
+<p>With Kafka Streams, you’re essentially tied to Kafka—and likely Kafka Connect—when working with external systems. With Flink, you can natively consume from and write to a wide range of systems, without relying on Kafka as a middleman.</p>
+<p>So while Kafka Streams certainly has its good parts - Flink ultimately offers a broader and more powerful foundation for real-time data processing at scale. Its architecture, flexibility, and rich ecosystem enable it to support a wider variety of use cases, from traditional streaming to emerging patterns involving data lakes and Kafka-less designs.</p>
+<p>Choosing between the two comes down to your team’s needs, your infrastructure, and the complexity of your data workflows. But if you’re building for the long term, with scalability, observability, and operational resilience in mind - Flink might just be the more future-proof bet.</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="https://desm.cloud/" >
+    &copy;  Democratize Streaming 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>
