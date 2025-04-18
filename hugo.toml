@@ -1,6 +1,6 @@
-baseURL = 'https://nadberezny.github.io/'
+baseURL = 'https://desm.cloud/'
 languageCode = 'en-us'
-title = 'Nadberezny Blog'
+title = 'Democratize Streaming'
 theme = 'ananke'
 
 [caches]
