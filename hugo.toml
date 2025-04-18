@@ -1,0 +1,8 @@
+baseURL = 'https://nadberezny.github.io/'
+languageCode = 'en-us'
+title = 'Nadberezny Blog'
+theme = 'ananke'
+
+[caches]
+[caches.images]
+dir = ':cacheDir/images'
