@@ -1,11 +1,13 @@
 +++
 title = 'Making the Right Choice: Flink or Kafka Streams?'
-author = 'Juliusz Nadberezny'
+author = 'Juliusz Nadbereżny'
 date = 2024-01-14T07:07:07+01:00
 draft = false
 +++
 
-![Fight image](../../assets/street-figher.jpg)
+# Making the Right Choice: Flink or Kafka Streams?
+
+![Fight image](/images/street-figher.jpg)
 ## Introduction
 This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams?
 In this post, I aim to guide you and help you make an informed decision based on practical factors. This comparison may also be useful if you’re considering migrating from one engine to another.
@@ -29,7 +31,7 @@ And finally, both use RocksDB as one of the state backends for scalable, local s
 But with this article, I want to focus on the fundamental differences - the kind that shape architecture and influence long-term maintainability and flexibility. We won’t be diving into what Werner Herzog might call the “accountant’s truth.” Instead, we’ll keep our eyes on what really matters when building reliable, scalable streaming systems.
 
 ## Time
-![Logical time image](../../assets/logical-time.png)
+![Logical time image](/images/logical-time.png)
 The most fundamental concept in stream processing is the notion of time—specifically, logical time, often referred to as event time. This concept abstracts away from wall-clock time. Instead, the timestamps on the events themselves drive the progression of time. In other words, it’s the data that moves the clock forward.
 You might think of this as somewhat similar to Lamport’s **logical clock**: if no new events arrive, time stands still.
 Flink and Kafka Streams approach this concept differently.
@@ -69,7 +71,7 @@ Flink is a fully-fledged distributed data processing framework. Flink has a dedi
 This enables advanced capabilities like autoscaling with fine-grained resource tuning, and good support for operations. 
 
 ## Final thoughts and word about versatility
-![Split road image](../../assets/split-road.png)
+![Split road image](/images/assets/split-road.png)
 
 As you might have noticed, Flink came out ahead in all the aspects we compared it to Kafka Streams. But I don’t want to give the wrong impression about Kafka Streams—I think it’s a great tool. There are areas where Kafka Streams, in my opinion, does things better. One notable example is the KTable abstraction, which feels more natural and intuitive compared to how state is managed in Flink. In Kafka Streams, KTable provides a clear, high-level representation of a changelog stream as a materialized view. In contrast, Flink’s state is tightly coupled to operators and scoped within the boundaries of a specific transformation. Also, what I really like about Kafka Streams is its simplicity in terms of architecture: it runs purely on Kafka, with no extra dependencies. That can be a key advantage for some teams.
 However, I don’t fully agree with the often repeated argument that Kafka Streams is much simpler than Flink. Frankly, I find Kafka Streams more challenging and harder to maintain at scale in production environments, precisely because of its “library-only” nature. The operational burden ends up on your shoulders.
