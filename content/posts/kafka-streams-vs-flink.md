@@ -71,7 +71,7 @@ Flink is a fully-fledged distributed data processing framework. Flink has a dedi
 This enables advanced capabilities like autoscaling with fine-grained resource tuning, and good support for operations. 
 
 ## Final thoughts and word about versatility
-![Split road image](/images/assets/split-road.png)
+![Split road image](/images/split-road.png)
 
 As you might have noticed, Flink came out ahead in all the aspects we compared it to Kafka Streams. But I don’t want to give the wrong impression about Kafka Streams—I think it’s a great tool. There are areas where Kafka Streams, in my opinion, does things better. One notable example is the KTable abstraction, which feels more natural and intuitive compared to how state is managed in Flink. In Kafka Streams, KTable provides a clear, high-level representation of a changelog stream as a materialized view. In contrast, Flink’s state is tightly coupled to operators and scoped within the boundaries of a specific transformation. Also, what I really like about Kafka Streams is its simplicity in terms of architecture: it runs purely on Kafka, with no extra dependencies. That can be a key advantage for some teams.
 However, I don’t fully agree with the often repeated argument that Kafka Streams is much simpler than Flink. Frankly, I find Kafka Streams more challenging and harder to maintain at scale in production environments, precisely because of its “library-only” nature. The operational burden ends up on your shoulders.
