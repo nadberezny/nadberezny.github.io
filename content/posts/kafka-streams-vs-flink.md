@@ -5,8 +5,6 @@ date = 2024-01-14T07:07:07+01:00
 draft = false
 +++
 
-# Making the Right Choice: Flink or Kafka Streams?
-
 ![Fight image](/images/street-figher.jpg)
 ## Introduction
 This is a question many teams may face when starting a new project with real-time streaming requirements: Should we use Flink or Kafka Streams?
