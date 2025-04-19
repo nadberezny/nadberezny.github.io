@@ -12,5 +12,5 @@ favicon = "/favicon.ico"
 commentoEnable = true
 
 [services.disqus]
-shortname = 'juliuszoniegin'
+shortname = 'desm-cloud'
 
