@@ -9,3 +9,8 @@ dir = ':cacheDir/images'
 
 [params]
 favicon = "/favicon.ico"
+commentoEnable = true
+
+[services.disqus]
+shortname = 'juliuszoniegin'
+
